@@ -16,6 +16,11 @@ const sequelize = new Sequelize(
   db.Sequelize = Sequelize;
   db.sequelize = sequelize;
 
-
+  db.todos = require("./todos")(sequelize, Sequelize);
+  db.activities = require("./activities")(sequelize, Sequelize);
   
+ //one activity has many todos
+  db.activities.hasMany(db.todos, {foreignKey: 'activity_group_id'});
+  db.todos.belongsTo(db.activities, {foreignKey: 'activity_group_id'});
+
   module.exports = db;
