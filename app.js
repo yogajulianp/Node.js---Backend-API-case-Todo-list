@@ -10,6 +10,7 @@ const db = require("./models");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var todosRouter = require('./routes/todos');
+var activitesRouter = require('./routes/activites');
 
 var app = express();
 
@@ -36,6 +37,7 @@ db.sequelize
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/todo-items', todosRouter);
+app.use('/activity-groups', activitesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
