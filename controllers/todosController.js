@@ -8,7 +8,7 @@ class TodosController {
             .then(data => {
                 if (data) {
                     res.status(200).json({
-                        info: "find all todo succes",
+                        info: "find all todo success",
                         data: data
                     });
                 } else {
@@ -20,7 +20,7 @@ class TodosController {
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err
+                    info: err.message
                 });
             });
     };
@@ -43,7 +43,7 @@ class TodosController {
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err
+                    info: err.message
                 });
             });
     };
@@ -64,12 +64,12 @@ class TodosController {
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err
+                    info: err.message
                 });
             });
     };
 
-    static async postUpadate(req, res, next) {
+    static async patchUpdate(req, res, next) {
         const id = req.params.id;
         var model = {
             activity_group_id: req.body.activity_group_id, 
@@ -88,7 +88,7 @@ class TodosController {
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err
+                    info: err.message
                 });
             });
     };
@@ -106,8 +106,10 @@ class TodosController {
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err
+                    info: err.message
                 });
             });
     };
-}
+};
+
+module.exports = TodosController
