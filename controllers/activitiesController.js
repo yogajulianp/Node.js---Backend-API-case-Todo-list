@@ -1,5 +1,5 @@
 const db = require('../models');
-const Activities = db.activity;
+const Activities = db.activities;
 const Todos = db.todos;
 
 class ActivitiesController {
@@ -51,7 +51,7 @@ class ActivitiesController {
         var id = parseInt(req.params.id);
         const getTodos = await Todos.findAll({
             where: {
-                id : id
+                activity_group_id : id
             }
         });
         
@@ -98,7 +98,7 @@ class ActivitiesController {
     };
 
     static async pacthUpdate(req, res, next) {
-        const id = req.params.id;
+        const id = parseInt(req.params.id);
         var model ={
             title : req.body.title,
         }
@@ -120,7 +120,7 @@ class ActivitiesController {
     };
 
     static async delete(req, res, next) {
-        const id = req.params.id;
+        const id = parseInt(req.params.id);
         await Activities.destroy({
             where: {id : id}
         })
