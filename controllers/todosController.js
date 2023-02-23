@@ -7,19 +7,22 @@ class TodosController {
             .then(data => {
                 if (data) {
                     res.status(200).json({
-                        info: "find all todo success",
+                        status: "Success",
+                        message: "find all todo success",
                         data: data
                     });
                 } else {
                     res.status(404).json({
-                        info: "data not found",
+                        status: "Not Found",
+                        message: "data todo not found",
 
                     })
                 }
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err.message
+                    status: "Error",
+                    message: err.message
                 });
             });
     };
@@ -30,40 +33,45 @@ class TodosController {
             .then(data => {
                 if (data) {
                     res.status(200).json({
-                        info: "find todo by id success",
+                        status: "Success",
+                        message: "find todo by id success",
                         data: data
                     })
                 } else {
                     res.status(400).json({
-                        info: "data not found",
-                        data: data
+                        status: "Not Found",
+                        message: "Todo with ID " + id + " Not Found",
+                       
                     })
                 }
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err.message
+                    status: "Error",
+                    message: err.message
                 });
             });
     };
 
     static async postCreate(req, res, next) {
         var model = {
-            activity_group_id: req.body.activity_group_id, 
             title: req.body.title,
+            activity_group_id: req.body.activity_group_id, 
             is_active: req.body.is_active,
             priority: req.body.priority
         }
         await Todos.create(model)
             .then(data =>{
                 res.status(200).json({
-                    info: "create todo success",
+                    status: "Success",
+                    message: "create todo success",
                     data: model
                 });
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err.message
+                    status: "Error",
+                    message: err.message
                 });
             });
     };
@@ -71,23 +79,25 @@ class TodosController {
     static async patchUpdate(req, res, next) {
         const id = req.params.id;
         var model = {
-            activity_group_id: req.body.activity_group_id, 
             title: req.body.title,
+            priority: req.body.priority,
             is_active: req.body.is_active,
-            priority: req.body.priority
+            status : req.body.status
         }
         await Todos.update(model, {
             where: {id : id}
         })
             .then(data => {
                 res.status(200).json({
-                    info: "update todo success",
+                    status: "Success",
+                    message: "update todo success",
                     data: model
                 })
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err.message
+                    status: "Error",
+                    message: err.message
                 });
             });
     };
@@ -98,14 +108,24 @@ class TodosController {
             where: {id : id}
         })
             .then(data =>{
-                res.status(200).json({
-                    info: "delete todo success",
-                    data: data
-                });
+                if(data > 0) {
+                    res.status(200).json({
+                        status: "Success",
+                        message: "delete todo success",
+                        data: data
+                    });
+                } else {
+                    res.status(404).json({
+                        status: "Not Found",
+                        message:  "Todo with ID " + id + " Not Found",
+                    })
+                }
+               
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err.message
+                    status: "Error",
+                    message: err.message
                 });
             });
     };

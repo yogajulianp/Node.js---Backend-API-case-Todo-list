@@ -3,46 +3,50 @@ const Activities = db.activities;
 const Todos = db.todos;
 
 class ActivitiesController {
-    static async getAll(req, res, next) {
-        await Activities.findAll()
-            .then(data => {
-                if(data) {
-                    res.status(200).json({
-                        info:"find all activites succes",
-                        data: data
+    // static async getAll(req, res, next) {
+    //     await Activities.findAll()
+    //         .then(data => {
+    //             if(data) {
+    //                 res.status(200).json({
+    //                      status: "Success",
+    //                     info:"find all activites succes",
+    //                     data: data
                  
-                    });
-                } else {
-                    res.status(404).json({
-                        info: "data not found"
-                    });
-                }  
-            })
-            .catch(err => {
-                res.status(400).json({
-                    info: err.message
-                });
-            });
-    };
+    //                 });
+    //             } else {
+    //                 res.status(404).json({
+    //                     info: "data not found"
+    //                 });
+    //             }  
+    //         })
+    //         .catch(err => {
+    //             res.status(400).json({
+    //                 info: err.message
+    //             });
+    //         });
+    // };
 
     static async getAllIncludeTodos(req, res, next) {
         await Activities.findAll({inclued: Todos})
             .then(data => {
                 if(data) {
                     res.status(200).json({
+                        status: "Success",
                         info:"find all activites succes",
                         data: data
                  
                     });
                 } else {
                     res.status(404).json({
-                        info: "data not found"
+                        status: "Not Found",
+                        message: "data Activity not found",
                     });
                 }  
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err.message
+                    status: "Error",
+                    message: err.message
                 });
             });
     };
@@ -59,19 +63,21 @@ class ActivitiesController {
             .then(data => {
                 if(data) {
                     res.status(200).json({
-                        info: "sucessfully found",
+                        status: "Success",
+                        message: "sucessfully found",
                         data : data,
                         todos: getTodos
                     })
                 } else {
                     res.status(404).json({
-                        info: "data not found with id " + id,
+                        status: "Not Found",
+                        info:  "Activity with ID " + id + " Not Found",
                     })
                 }
             })
             .catch(err => {
                 res.status(400).json({
-                    info: "Error",
+                    status: "Error",
                     message: err.message,
                 });
             });
@@ -85,13 +91,14 @@ class ActivitiesController {
         await Activities.create(model)
             .then(data => {
                 res.status(200).json({
-                    info: "activity sucessfully created",
+                    status: "Success",
+                    message: "activity sucessfully created",
                     data: model
                 });
             })
             .catch(err => {
                 res.status(400).json({
-                    info : "error creating",
+                    status : "error creating",
                     message: err.message
                 });
             });
@@ -107,13 +114,14 @@ class ActivitiesController {
         })
             .then(data => {
                 res.status(200).json({
-                    info: "activity update success",
+                    status: "Success",
+                    message: "activity update success",
                     data: model
                 })
             })
             .catch(err => {
                 res.status(400).json({
-                    info: "error upadate",
+                    status: "Error",
                     message: err.message
                 });
             });
@@ -125,14 +133,24 @@ class ActivitiesController {
             where: {id : id}
         })
             .then(data =>{
-                res.status(200).json({
-                    info: "delete activity success",
-                    data: data
-                });
+                if(data > 0) {
+                    res.status(200).json({
+                        status: "Success",
+                        message: "delete activity success",
+                        data: data
+                    });
+                }else {
+                    res.status(404).json({
+                        status: "Not Found",
+                        info:  "Activity with ID " + id + " Not Found",
+                    })
+                }
+                
             })
             .catch(err => {
                 res.status(400).json({
-                    info: err.message
+                    info: "Error",
+                    message: err.message
                 });
             });
     };
