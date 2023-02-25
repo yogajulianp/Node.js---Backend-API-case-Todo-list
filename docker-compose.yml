@@ -1,0 +1,31 @@
+version: "3.8"
+services:
+  mysqldb:
+    image: mysql:8.0
+    restart: always
+    env_file: .env
+    environment:
+      - MYSQL_DATABASE=db_todo
+      - MYSQL_USER= root
+      - MYSQL_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD=1234
+    ports:
+      - '13306:${MYSQL_PORT:-3306}'
+
+  nodeapp:
+    depends_on:
+      - mysqldb
+    build: .
+    image: nodeapp:v01
+    restart: always
+    env_file: .env
+    ports:
+      - "3030:3030"
+    environment:
+    - MYSQL_HOST=mysqldb
+    - MYSQL_USER=roo'
+    - MYSQL_PASSWORD=1234
+    - MYSQL_DBNAME=db_todo 
+    - MYSQL_PORT=3306
+    stdin_open: true
+    tty: true
